@@ -52,4 +52,5 @@ Mkfile.old
 dkms.conf
 
 # build
-build/
+eg-amp.lv2/build/
+eg-amp-gtk.lv2/build/
