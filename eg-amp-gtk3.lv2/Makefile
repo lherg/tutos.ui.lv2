@@ -69,8 +69,8 @@ endif
 
 CLV2UI=
 ifneq ($(BUILDGTK), no)
-  ifeq ($(shell $(PKG_CONFIG) --exists glib-2.0 gtk+-2.0 || echo no), no)
-    $(warning "The optional plugin GUI requires glib-2.0 and gtk+-2.0")
+  ifeq ($(shell $(PKG_CONFIG) --exists glib-2.0 gtk+-3.0 || echo no), no)
+    $(warning "The optional plugin GUI requires glib-2.0 and gtk+-3.0")
     $(warning "call  make BUILDGTK=no  to disable the GUI.")
     $(error "Aborting build.")
   endif
@@ -87,8 +87,8 @@ ifeq ($(shell $(PKG_CONFIG) --atleast-version=1.8.1 lv2 && echo yes), yes)
 endif
 
 
-GTKCFLAGS = `$(PKG_CONFIG) --cflags gtk+-2.0`
-GTKLIBS   = `$(PKG_CONFIG) --libs gtk+-2.0`
+GTKCFLAGS = `$(PKG_CONFIG) --cflags gtk+-3.0`
+GTKLIBS   = `$(PKG_CONFIG) --libs gtk+-3.0`
 
 CAIROFLAGS = `$(PKG_CONFIG) --cflags cairo`
 CAIROLIBS   = `$(PKG_CONFIG) --libs cairo`

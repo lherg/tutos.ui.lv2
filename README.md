@@ -12,7 +12,6 @@ https://github.com/lv2/lv2/tree/master/plugins/eg-amp.lv2<br/>
 A copie of eg-amp from  lv2 distribution.<br/>
 Adding a gtk2 UI.<br/>
 
-## eg-amp-robtk.lv2<br/>
+## eg-amp-gtk3.lv2<br/>
 A copie of eg-amp from  lv2 distribution.<br/>
-Adding a robtk UI.<br/>
-https://github.com/x42/robtk.git<br/>
+Adding a gtk3 UI.<br/>
