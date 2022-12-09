@@ -53,4 +53,4 @@ dkms.conf
 
 # build
 eg-amp.lv2/build/
-eg-amp-gtk.lv2/build/
+eg-amp-gtk2.lv2/build/

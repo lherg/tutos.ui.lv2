@@ -1,4 +1,0 @@
-Compilling<g/>
-```
-make
-```

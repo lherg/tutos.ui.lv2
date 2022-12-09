@@ -22,7 +22,7 @@ SRCDIR=src/
 
 LV2NAME=amp
 LV2UINAME=amp_ui
-BUNDLE=lv2
+BUNDLE=eg.lv2
 
 targets=
 
@@ -121,12 +121,21 @@ $(BUILDDIR)$(LV2NAME).ttl: $(LV2NAME).ttl
 	@mkdir -p $(BUILDDIR)
 	cp $(LV2NAME).ttl $(BUILDDIR)$(LV2NAME).ttl
 
+
+
 $(BUILDDIR)$(LV2NAME)$(LIB_EXT): amp.c
 	@mkdir -p $(BUILDDIR);
 	$(CXX) $(CPPFLAGS) $(CXXFLAGS) \
 	  -o $(BUILDDIR)$(LV2NAME)$(LIB_EXT) amp.c \
 	  -shared $(LV2LDFLAGS) $(LDFLAGS) $(LOADLIBES)
 	$(STRIP) $(STRIPFLAGS) $(BUILDDIR)$(LV2NAME)$(LIB_EXT)
+
+$(BUILDDIR)$(LV2UINAME)$(LIB_EXT): amp_ui.c
+	@mkdir -p $(BUILDDIR)
+	$(CXX) $(CPPFLAGS) $(CXXFLAGS) $(GTKCFLAGS) $(CAIROFLAGS)\
+	  -o $(BUILDDIR)$(LV2UINAME)$(LIB_EXT) amp_ui.c \
+	  -shared $(LV2LDFLAGS) $(LDFLAGS) $(LOADLIBES) $(GTKLIBS) $(CAIROLIBS)
+	$(STRIP) $(STRIPFLAGS) $(BUILDDIR)$(LV2UINAME)$(LIB_EXT)
 
 
 # clean target definitions
