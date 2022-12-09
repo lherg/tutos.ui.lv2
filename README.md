@@ -1,14 +1,14 @@
 # tutos.ui.lv2
-1- hello<br/>
-Without UI <br/>
+A series of tutorials about the graphical interfaces of LV2 plugins<br/>
+The Makefile is adapted from those of Robin Gareus:<br/>
+https://github.com/x42/x42-plugins
 
-2- hello_gkt<br/>
-Gtk UI<br/>
+## eg-amp.lv2<br/>
+A copie of eg-amp from  lv2 distribution.<br/>
+This plugin don't have an UI.This plugin don't have an UI.<br/>
+https://github.com/lv2/lv2/tree/master/plugins/eg-amp.lv2<br/>
 
-3- hello_robtk<br/>
-Robtk UI<br/>
+## eg-amp-gtk.lv2<br/>
+A copie of eg-amp from  lv2 distribution.<br/>
+Adding a gtk2 UI.<br/>
 
-From<br/>
-https://lv2plug.in/book/#_simple_oscilloscope<br/>
-https://github.com/x42/convoLV2.git<br/>
-https://github.com/x42/sisco.lv2.git<br/>

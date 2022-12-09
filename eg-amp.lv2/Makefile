@@ -1,8 +1,9 @@
 #!/usr/bin/make -f
 
+# An adaptation of https://github.com/x42/convoLV2.git Makefile
 # these can be overridden using make variables. e.g.
 #   make CXXFLAGS=-O2
-#   make install DESTDIR=$(CURDIR)/debian/convoLV2 PREFIX=/usr
+#   make install DESTDIR=$(CURDIR)/debian/tutoLV2 PREFIX=/usr
 #
 PREFIX ?= /usr/local
 LV2DIR ?= $(PREFIX)/lib/lv2
@@ -13,14 +14,15 @@ CXXFLAGS ?= $(OPTIMIZATIONS) -Wall
 PKG_CONFIG?=pkg-config
 STRIP ?= strip
 
-BUILDGTK ?= no
+BUILDGTK ?= yes
 
 ###############################################################################
 BUILDDIR=build/
+SRCDIR=src/
 
-LV2NAME=convoLV2
-LV2GUI=convoLV2UI
-BUNDLE=convo.lv2
+LV2NAME=amp
+LV2UINAME=amp_ui
+BUNDLE=lv2
 
 targets=
 
@@ -75,13 +77,6 @@ ifneq ($(BUILDGTK), no)
 	CLV2UI=ui:ui clv2:ui;
 endif
 
-ifeq ($(LIBZITACONVOLVER),)
-  ifeq ($(shell test -f /usr/include/zita-convolver.h -o -f /usr/local/include/zita-convolver.h || echo no ), no)
-    $(error "libzita-convolver3 or 4, is required")
-  endif
-  LOADLIBES += -lzita-convolver
-endif
-
 # add library dependent flags and libs
 
 override CXXFLAGS +=`$(PKG_CONFIG) --cflags glib-2.0 lv2 sndfile samplerate`
@@ -95,10 +90,14 @@ endif
 GTKCFLAGS = `$(PKG_CONFIG) --cflags gtk+-2.0`
 GTKLIBS   = `$(PKG_CONFIG) --libs gtk+-2.0`
 
+CAIROFLAGS = `$(PKG_CONFIG) --cflags cairo`
+CAIROLIBS   = `$(PKG_CONFIG) --libs cairo`
+
 targets+= $(BUILDDIR)$(LV2NAME)$(LIB_EXT)
+targets+= $(BUILDDIR)$(LV2UINAME)$(LIB_EXT)
 
 ifneq ($(BUILDGTK), no)
-	targets+=$(BUILDDIR)$(LV2GUI)$(LIB_EXT)
+	targets+=$(BUILDDIR)$(LV2UINAME)$(LIB_EXT)
 endif
 
 # build target definitions
@@ -113,55 +112,28 @@ lv2syms:
 lv2uisyms:
 	echo "_lv2ui_descriptor" > lv2uisyms
 
-$(BUILDDIR)manifest.ttl: lv2ttl/manifest.ttl.in lv2ttl/manifest.gui.ttl.in
+$(BUILDDIR)manifest.ttl: manifest.ttl.in
 	@mkdir -p $(BUILDDIR)
 	sed "s/@LV2NAME@/$(LV2NAME)/;s/@LV2GUI@/$(LV2GUI)/;s/@LIB_EXT@/$(LIB_EXT)/" \
-	  lv2ttl/manifest.ttl.in > $(BUILDDIR)manifest.ttl
-ifneq ($(BUILDGTK), no)
-	sed "s/@LV2NAME@/$(LV2NAME)/;s/@LV2GUI@/$(LV2GUI)/;s/@LIB_EXT@/$(LIB_EXT)/" \
-		lv2ttl/manifest.gui.ttl.in >> $(BUILDDIR)manifest.ttl
-endif
+	 manifest.ttl.in > $(BUILDDIR)manifest.ttl
 
-$(BUILDDIR)$(LV2NAME).ttl: lv2ttl/$(LV2NAME).ttl.in lv2ttl/$(LV2NAME).gui.ttl.in
+$(BUILDDIR)$(LV2NAME).ttl: $(LV2NAME).ttl
 	@mkdir -p $(BUILDDIR)
-	sed "s/@CLV2UI@/$(CLV2UI)/" \
-		lv2ttl/$(LV2NAME).ttl.in > $(BUILDDIR)$(LV2NAME).ttl
-ifneq ($(BUILDGTK), no)
-	cat lv2ttl/$(LV2NAME).gui.ttl.in >> $(BUILDDIR)$(LV2NAME).ttl
-endif
+	cp $(LV2NAME).ttl $(BUILDDIR)$(LV2NAME).ttl
 
-$(BUILDDIR)$(LV2NAME)$(LIB_EXT): lv2.c convolution.cc uris.h
-	@mkdir -p $(BUILDDIR)
+$(BUILDDIR)$(LV2NAME)$(LIB_EXT): amp.c
+	@mkdir -p $(BUILDDIR);
 	$(CXX) $(CPPFLAGS) $(CXXFLAGS) \
-	  -o $(BUILDDIR)$(LV2NAME)$(LIB_EXT) lv2.c convolution.cc \
-	  $(LIBZITACONVOLVER) \
+	  -o $(BUILDDIR)$(LV2NAME)$(LIB_EXT) amp.c \
 	  -shared $(LV2LDFLAGS) $(LDFLAGS) $(LOADLIBES)
 	$(STRIP) $(STRIPFLAGS) $(BUILDDIR)$(LV2NAME)$(LIB_EXT)
 
-$(BUILDDIR)$(LV2GUI)$(LIB_EXT): ui.c uris.h
-	$(CXX) $(CPPFLAGS) $(CXXFLAGS) $(GTKCFLAGS) \
-	  -o $(BUILDDIR)$(LV2GUI)$(LIB_EXT) ui.c \
-		-shared $(LV2LDFLAGS) $(LDFLAGS) $(GTKLIBS)
-	$(STRIP) $(UISTRIPFLAGS) $(BUILDDIR)$(LV2GUI)$(LIB_EXT)
 
-
-# install/uninstall/clean target definitions
-
-install: all
-	install -d $(DESTDIR)$(LV2DIR)/$(BUNDLE)
-	install -m755 $(targets) $(DESTDIR)$(LV2DIR)/$(BUNDLE)
-	install -m644 $(BUILDDIR)manifest.ttl $(BUILDDIR)$(LV2NAME).ttl $(DESTDIR)$(LV2DIR)/$(BUNDLE)
-
-uninstall:
-	rm -f $(DESTDIR)$(LV2DIR)/$(BUNDLE)/manifest.ttl
-	rm -f $(DESTDIR)$(LV2DIR)/$(BUNDLE)/$(LV2NAME).ttl
-	rm -f $(DESTDIR)$(LV2DIR)/$(BUNDLE)/$(LV2NAME)$(LIB_EXT)
-	rm -f $(DESTDIR)$(LV2DIR)/$(BUNDLE)/$(LV2GUI)$(LIB_EXT)
-	-rmdir $(DESTDIR)$(LV2DIR)/$(BUNDLE)
+# clean target definitions
 
 clean:
 	rm -f $(BUILDDIR)manifest.ttl $(BUILDDIR)$(LV2NAME).ttl \
-		$(BUILDDIR)$(LV2NAME)$(LIB_EXT) $(BUILDDIR)$(LV2GUI)$(LIB_EXT) \
+		$(BUILDDIR)$(LV2NAME)$(LIB_EXT) $(BUILDDIR)$(LV2UINAME)$(LIB_EXT) \
 		lv2syms lv2uisyms
 	rm -rf $(BUILDDIR)*.dSYM
 	-test -d $(BUILDDIR) && rmdir $(BUILDDIR) || true
