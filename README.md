@@ -1,5 +1,6 @@
 # tutos.ui.lv2
 A series of tutorials about the graphical interfaces of LV2 plugins<br/>
+Makefile only works for linux<br/>
 
 ## eg-amp.lv2<br/>
 A copie of eg-amp from  lv2 distribution.<br/>
