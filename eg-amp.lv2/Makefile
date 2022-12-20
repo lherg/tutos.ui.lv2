@@ -7,6 +7,7 @@ PKG_CONFIG ?=pkg-config
 CURDIR = $(PWD)/
 APPNAME=amp
 APPUINAME=
+LV2NAME=eg-amp.lv2
 LIB_EXT=.so
 
 ################################################################################################
@@ -32,9 +33,13 @@ $(BUILDDIR)$(APPNAME)$(LIB_EXT): amp.c
 	@mkdir -p $(BUILDDIR);
 	$(CXX) $(CFLAGS) -o $(BUILDDIR)$(APPNAME)$(LIB_EXT) amp.c -shared $(LV2LDFLAGS) -lm
 
-# clean target definitions
+install: 
+	ln -s $(CURDIR)build ~/.lv2/$(LV2NAME)
+
+uninstall:
+	rm -Rf ~/.lv2/$(LV2NAME)
 
 clean:
-	rm -Rf $(BUILDDIR)
+	rm -Rf $(BUILDDIR) ~/.lv2/$(LV2NAME)
 
 .PHONY: clean all install uninstall

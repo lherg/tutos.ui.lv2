@@ -42,28 +42,10 @@ $(BUILDDIR)$(APPUINAME)$(LIB_EXT): amp_ui.c
 install: 
 	ln -s $(CURDIR)build ~/.lv2/$(LV2NAME)
 
+uninstall:
+	rm -Rf ~/.lv2/$(LV2NAME)
+
 clean:
 	rm -Rf $(BUILDDIR) ~/.lv2/$(LV2NAME)
 
 .PHONY: clean all install uninstall
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
