@@ -11,7 +11,7 @@ This plugin does not have its own UI, the plugin host provides access to gain se
 Carla<br/>
 ![alt text](https://github.com/lherg/tutos.ui.lv2/blob/main/png/eg-amp-carla.png)<br/>
 
-<br/>
+Jalv<br/>
 ![alt text](https://github.com/lherg/tutos.ui.lv2/blob/main/png/eg-amp-jalv.png)<br/>
 
 ## eg-amp-gtk.lv2<br/>
