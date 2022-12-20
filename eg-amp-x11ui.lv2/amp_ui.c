@@ -10,7 +10,7 @@
 #include <gtk/gtk.h>
 //#include <iostream>
 
-#define AMP_UI_URI "http://lv2plug.in/plugins/eg-amp-gtk2#ui"
+#define AMP_UI_URI "http://lv2plug.in/plugins/eg-amp-x11gl#ui"
 
 typedef struct {
   LV2UI_Write_Function write;
@@ -20,7 +20,7 @@ typedef struct {
   GtkWidget* window;
   GtkWidget* box;
   GtkWidget* hscale;   
-  GtkObject* adjustment;
+  GtkAdjustment* adjustment;
   GtkWidget* label;
 
   bool       did_init;

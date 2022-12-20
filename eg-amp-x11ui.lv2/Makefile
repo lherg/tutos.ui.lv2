@@ -7,7 +7,7 @@ PKG_CONFIG ?=pkg-config
 CURDIR = $(PWD)/
 APPNAME=amp
 APPUINAME=amp_ui
-LV2NAME=eg-amp-gtk3.lv2
+LV2NAME=eg-amp-x11gl.lv2
 LIB_EXT=.so
 
 ################################################################################################
