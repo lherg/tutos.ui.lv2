@@ -4,11 +4,11 @@
 
 <http://lv2plug.in/plugins/eg-amp-gtk2>
 	a lv2:Plugin ;
-	lv2:binary <amp@LIB_EXT@> ;
+	lv2:binary <amp.so> ;
 	rdfs:seeAlso <amp.ttl> .
 
 
 <http://lv2plug.in/plugins/eg-amp-gtk2#ui>
 	a ui:GtkUI ;
-	lv2:binary <amp_ui@LIB_EXT@> ;
+	lv2:binary <amp_ui.so> ;
 	rdfs:seeAlso <amp.ttl> .

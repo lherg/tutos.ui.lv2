@@ -15,6 +15,8 @@ Jalv<br/>
 ## eg-amp-gtk.lv2<br/>
 A copie of eg-amp from  lv2 distribution.<br/>
 Adding a gtk2 UI.<br/>
+Jalv<br/>
+![alt text](https://github.com/lherg/tutos.ui.lv2/blob/main/png/eg-amp-gtk2.png)<br/>
 
 ## eg-amp-gtk3.lv2<br/>
 A copie of eg-amp from  lv2 distribution.<br/>
