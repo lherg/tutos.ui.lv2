@@ -1,0 +1,56 @@
+@prefix atom:  <http://lv2plug.in/ns/ext/atom#> .
+@prefix doap:  <http://usefulinc.com/ns/doap#> .
+@prefix foaf:  <http://xmlns.com/foaf/0.1/> .
+@prefix lv2:   <http://lv2plug.in/ns/lv2core#> .
+@prefix units: <http://lv2plug.in/ns/extensions/units#> .
+@prefix rdfs:  <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix ui:    <http://lv2plug.in/ns/extensions/ui#> .
+@prefix urid:  <http://lv2plug.in/ns/ext/urid#> .
+@prefix param: <http://lv2plug.in/ns/ext/parameters#> .
+@prefix pg:    <http://lv2plug.in/ns/ext/port-groups#> .
+@prefix pprop: <http://lv2plug.in/ns/ext/port-props#> .
+@prefix rdf:   <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rsz:   <http://lv2plug.in/ns/ext/resize-port#> .
+@prefix kx:    <http://kxstudio.sf.net/ns/lv2ext/external-ui#> .
+
+@prefix amp: <http://github.com/lherg/lv2/eg-amp-robtk> .
+
+<http://github.com/lherg/lv2/eg-amp-robtk>
+	a lv2:Plugin, doap:Project, lv2:UtilityPlugin;
+	doap:license <http://usefulinc.com/doap/licenses/gpl>;
+	doap:maintainer <https://github.com/lherg>;
+	doap:name "Simple Amplifier";
+	lv2:microVersion 0 ;lv2:minorVersion 1030 ;
+	ui:ui amp:ui_gl ;
+	lv2:optionalFeature lv2:hardRTCapable;
+  ui:ui <http://github.com/lherg/lv2/eg-amp-robtkui_gl> ;
+  lv2:port  [
+      a lv2:ControlPort ,
+        lv2:InputPort ;
+      lv2:index 0 ;
+      lv2:symbol "gain" ;
+      lv2:name "Gain" ;
+      lv2:minimum -90.0;
+      lv2:maximum  24.0;
+      lv2:default  0.0;
+      lv2:scalePoint [ rdfs:label "invert"; rdf:value -1.0 ; ] ;
+      lv2:scalePoint [ rdfs:label "off"; rdf:value 0.0 ; ] ;
+      lv2:scalePoint [ rdfs:label "on"; rdf:value 1.0 ; ] ;
+    ] , [
+      a lv2:AudioPort ,
+        lv2:InputPort ;
+      lv2:index 1 ;
+      lv2:symbol "in" ;
+      lv2:name "Audio Input" ;
+    ] , [
+      a lv2:AudioPort ,
+        lv2:OutputPort ;
+      lv2:index 2 ;
+      lv2:symbol "out" ;
+      lv2:name "Audio Output" ;
+    ]; .
+
+  <http://github.com/lherg/lv2/eg-amp-robtkui_gl>
+    a ui:X11UI ;
+    lv2:requiredFeature ui:idleInterface; lv2:extensionData ui:idleInterface;
+    .
