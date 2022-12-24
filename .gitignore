@@ -57,3 +57,6 @@ eg-amp-gtk2.lv2/build/
 eg-amp-gtk3.lv2/build/
 eg-amp-x11gl.lv2/build/
 eg-amp-x11gl.lv2/pugl/*
+eg-amp-robtk.lv2/build/
+eg-amp-robtk.lv2/bin/
+eg-amp-robtk.lv2/pugl/*
