@@ -8,21 +8,23 @@ Reading references<br/>
 https://lv2plug.in/book/<br/>
 
 ## eg-amp.lv2<br/>
-Makefile only works for linux<br/>
+Makefile only works for linux.<br/>
 This plugin does not have its own UI, the plugin host provides access to gain settings.<br/>
 
-Carla<br/>
+Carla:<br/>
 ![alt text](https://github.com/lherg/tutos.ui.lv2/blob/main/png/eg-amp-carla.png)<br/>
 
-Jalv<br/>
+Jalv:<br/>
 ![alt text](https://github.com/lherg/tutos.ui.lv2/blob/main/png/eg-amp-jalv.png)<br/>
 
 ## eg-amp-gtk.lv2<br/>
+Makefile only works for linux.<br/>
 A copie of eg-amp from  lv2 distribution.<br/>
 Adding a gtk2 UI.<br/>
 ![alt text](https://github.com/lherg/tutos.ui.lv2/blob/main/png/eg-amp-gtk2.png)<br/>
 
 ## eg-amp-gtk3.lv2<br/>
+Makefile only works for linux.<br/>
 A copie of eg-amp from  lv2 distribution.<br/>
 Adding a gtk3 UI.<br/>
 ![alt text](https://github.com/lherg/tutos.ui.lv2/blob/main/png/eg-amp-gtk3.png)<br/>
@@ -31,6 +33,6 @@ Adding a gtk3 UI.<br/>
 A copie of eg-amp from  lv2 distribution.<br/>
 Adding a robtk UI.<br/>
 Simplification of  Robin Gareus matrixmixer plugins to have only one input output:<br/>
- https://github.com/x42/matrixmixer.lv2 <br/>
-
+https://github.com/x42/matrixmixer.lv2 <br/>
+the Makefile is adapted from that of matrixmixer.<br/>
 ![alt text](https://github.com/lherg/tutos.ui.lv2/blob/main/png/eg-amp-robtk.png)<br/>
