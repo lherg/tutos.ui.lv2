@@ -30,4 +30,7 @@ Adding a gtk3 UI.<br/>
 ## eg-amp-robtk.lv2<br/>
 A copie of eg-amp from  lv2 distribution.<br/>
 Adding a robtk UI.<br/>
+Simplification of  Robin Gareus matrixmixer plugins to have only one input output:<br/>
+ https://github.com/x42/matrixmixer.lv2 <br/>
+
 ![alt text](https://github.com/lherg/tutos.ui.lv2/blob/main/png/eg-amp-robtk.png)<br/>
