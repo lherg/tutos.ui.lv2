@@ -69,12 +69,7 @@ cb_amp_gain (RobWidget* w, void* handle)
 {
 	AmpUI* ui = (AmpUI*)handle;
 
-	//float val = knob_pos_to_gain (robtk_dial_get_value (ui->amp_gain));
 	float val = robtk_dial_get_value (ui->amp_gain);
-	//fprintf(stderr, "ui->amp_gain: %f\n", ui->amp_gain);
-	//fprintf(stderr, "robtk_dial_get_value (ui->amp_gain): %f\n", robtk_dial_get_value (ui->amp_gain));
-	//fprintf(stderr, "val: %f\n", val);
-	//fprintf(stderr, "-----------------------------------------------\n");
 	if (ui->disable_signals) {
 		return TRUE;
 	}
@@ -109,7 +104,7 @@ toplevel (AmpUI* ui, void* const top)
 	// TODO log-scale mapping  -inf || -60 .. +6dB
 
 	ui->amp_gain = robtk_dial_new_with_size (
-		-90.0f, 24.0f, 1.0f,
+		-12.0f, 12.0f, 0.1f,
 		GD_W, GD_H, GD_CX, GD_CY, GD_RAD);
 
 	robtk_dial_set_default (ui->amp_gain, 0.0f);

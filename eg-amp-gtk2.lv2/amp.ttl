@@ -60,6 +60,6 @@
 	lv2:extensionData ui:showInterface ;	
 	ui:portNotification [
 		ui:plugin <http://lv2plug.in/plugins/eg-amp-gtk2>;
-		lv2:symbol "notify" ;
-		ui:notifyType atom:Blank
+		lv2:symbol "gain" ;
+		ui:protocol ui:floatProtocol
 	] .

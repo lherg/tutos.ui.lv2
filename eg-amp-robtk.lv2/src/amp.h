@@ -1,4 +1,4 @@
-#define AMP_URI "http://github.com/lherg/lv2/eg-amp-robtk"
+#define AMP_URI "http://lv2plug.in/plugins/eg-amp-robtk"
 
 typedef enum { 
     AMP_GAIN = 0, 
