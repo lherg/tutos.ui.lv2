@@ -4,7 +4,6 @@ A copie of eg-amp from  lv2 distribution.<br/>
 Adding a gtk2 UI.<br/>
 ![alt text](https://github.com/lherg/tutos.ui.lv2/blob/main/png/eg-amp-gtk2.png)<br/>
 
-<br/>
 Compile<br/>
 ```
 make
