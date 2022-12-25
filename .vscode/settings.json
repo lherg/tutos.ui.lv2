@@ -5,6 +5,8 @@
         "string.h": "c",
         "pugl.h": "c",
         "stdlib.h": "c",
-        "robtk.h": "c"
+        "robtk.h": "c",
+        "ui.h": "c",
+        "amp.h": "c"
     }
 }

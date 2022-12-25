@@ -1,7 +1,6 @@
-/* Amp
- *
- * Copyright (C) lherg
- */
+// https://github.com/lherg/tutos.ui.lv2 
+// eg-amp-robtk.lv2
+// gui/amp.c
 
 #include <math.h>
 #include <stdio.h>
@@ -32,6 +31,9 @@ typedef struct {
 
 	bool disable_signals;
 } AmpUI;
+
+/*****************************************************************************/
+// UI
 
 static float
 knob_pos_to_gain (float v)

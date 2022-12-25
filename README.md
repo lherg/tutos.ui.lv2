@@ -1,11 +1,14 @@
 # tutos.ui.lv2
-A series of tutorials about the graphical interfaces of LV2 plugins<br/>
-Makefile only works for linux<br/>
-
-## eg-amp.lv2<br/>
-A copie of eg-amp from lv2 distribution.<br/>
+Some examples of projects on the programming of graphical interfaces of LV2 plugins<br/>
+The first, "eg-amp", is taken from the LV2 distribution:<br/>
+I only change the gain amplitude to 24dB<br/>
 https://github.com/lv2/lv2/tree/master/plugins/eg-amp.lv2<br/>
 
+Reading references<br/>
+https://lv2plug.in/book/<br/>
+
+## eg-amp.lv2<br/>
+Makefile only works for linux<br/>
 This plugin does not have its own UI, the plugin host provides access to gain settings.<br/>
 
 Carla<br/>
