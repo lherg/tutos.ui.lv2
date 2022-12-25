@@ -1,14 +1,19 @@
-Compile<g/>
+# eg-amp.lv2<br/>
+
+![alt text](https://github.com/lherg/tutos.ui.lv2/blob/main/png/eg-amp-jalv.png)<br/>
+<br/>
+Compile<br/>
 ```
 make
 ```
-
-Install<g/>
+<br/>
+Install<br/>
 ```
 make install
 ```
 
-Run<g/>
+<br/>
+Run<br/>
 ```
 jalv.gtk http://lv2plug.in/plugins/eg-amp
 ```
