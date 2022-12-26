@@ -35,120 +35,77 @@ typedef struct {
 /*****************************************************************************/
 // UI
 
-static float
-knob_pos_to_gain (float v)
+/* Remove an delete UI windows. */
+static void
+destroy_window(AmpUI* ui)
 {
-	if (v == 0.f) {
-		return 0;
-	}
-	return exp (((pow (fabs (v), 0.125) * 150.) - 144.) * log (2.) / 6.);
+    robtk_dial_destroy (ui->amp_gain);
+    robtk_lbl_destroy (ui->amp_lbl);
+    rob_table_destroy (ui->amp_table);
+    rob_box_destroy (ui->rw);
 }
 
-static float
-knob_gain_to_pos (float v)
-{
-	if (v == 0.f) {
-		return 0;
-	}
-	return pow ((6. * log (fabs (v)) / log (2.) + 144.) / 150., 8.);
-}
-
-static float
-knob_to_db (float v)
-{
-	return 20.f * log10f (knob_pos_to_gain (v));
-}
-
-/* ****************************************************************************
- * UI callbacks
- */
-
-/** Send current UI settings to backend. */
+/* Gain callback (Gtk widget). */
 static bool
-cb_amp_gain (RobWidget* w, void* handle)
+cb_amp_gain(RobWidget* w, void* handle)
 {
 	AmpUI* ui = (AmpUI*)handle;
-
-	float val = robtk_dial_get_value (ui->amp_gain);
+	float gain = robtk_dial_get_value (ui->amp_gain);
 	if (ui->disable_signals) {
 		return TRUE;
 	}
-
-	ui->write (ui->controller, AMP_GAIN, sizeof (float), 0, (const void*)&val);
+	ui->write (ui->controller, AMP_GAIN, sizeof (float), 0, &gain);
 	return TRUE;
 }
-
-
-/******************************************************************************
- * RobWidget
- */
 
 static RobWidget*
 toplevel (AmpUI* ui, void* const top)
 {
+	/* toplevel */
 	ui->rw = rob_vbox_new (FALSE, 2);
 	robwidget_make_toplevel (ui->rw, top);
 	robwidget_toplevel_enable_scaling (ui->rw);
-
+	
+	/* toplevel */
 	ui->amp_table = rob_table_new (/*rows*/ 2, /*cols*/ 1, FALSE);
 
+	/* label */
 	ui->amp_lbl = robtk_lbl_new ("Gain");
 	rob_table_attach (ui->amp_table, robtk_lbl_widget (ui->amp_lbl),
-	                  1, N_OUTPUTS + 1,
+	                  1, 2,
 	                  0, 1,
 	                  2, 2, RTK_SHRINK, RTK_SHRINK);
 
-	/* amp_table */
-	unsigned int n = 0;
 
-	// TODO log-scale mapping  -inf || -60 .. +6dB
-
+	/* dial */
 	ui->amp_gain = robtk_dial_new_with_size (
 		-12.0f, 12.0f, 0.1f,
 		GD_W, GD_H, GD_CX, GD_CY, GD_RAD);
-
 	robtk_dial_set_default (ui->amp_gain, 0.0f);
 	robtk_dial_set_callback (ui->amp_gain, cb_amp_gain, ui);
-	float detent = knob_gain_to_pos (0.f);
-	robtk_dial_set_detents (ui->amp_gain, 1 , &detent);
-
+	float detent = 0.f;
+	robtk_dial_set_detents (ui->amp_gain, 6 , &detent);
 	robtk_dial_enable_states (ui->amp_gain, 1);
 	robtk_dial_set_state_color (ui->amp_gain, 1, 1.0, .0, .0, .3);
 	robtk_dial_set_default_state (ui->amp_gain, 0);
-
 	ui->amp_gain->displaymode = 3;
-
 	if (ui->touch) {
 		robtk_dial_set_touch (ui->amp_gain, ui->touch->touch, ui->touch->handle, AMP_OUTPUT);
 	}
-
 	rob_table_attach (ui->amp_table, robtk_dial_widget (ui->amp_gain),
 						1, 2,
 						1, 2,
 						0, 0, RTK_SHRINK, RTK_SHRINK);
-
-	memcpy (ui->amp_gain->rw->name, &n, sizeof (unsigned int));
 
 	/* top-level packing */
 	rob_vbox_child_pack (ui->rw, ui->amp_table, TRUE, TRUE);
 	return ui->rw;
 }
 
-/******************************************************************************
- * LV2
- */
-
-static void
-gui_cleanup (AmpUI* ui)
-{
-	robtk_dial_destroy (ui->amp_gain);
-	robtk_lbl_destroy (ui->amp_lbl);
-	rob_table_destroy (ui->amp_table);
-	rob_box_destroy (ui->rw);
-}
+/*****************************************************************************/
+// LV2
 
 #define LVGL_RESIZEABLE
-
 static void ui_disable(LV2UI_Handle handle) { }
 static void ui_enable(LV2UI_Handle handle) { }
 
@@ -190,40 +147,33 @@ plugin_scale_mode (LV2UI_Handle handle)
 }
 
 static void
-cleanup (LV2UI_Handle handle)
+cleanup(LV2UI_Handle handle)
 {
 	AmpUI* ui = (AmpUI*)handle;
-	gui_cleanup (ui);
+	destroy_window (ui);
 	free (ui);
 }
 
+/* receive information from DSP */
+static void
+port_event(LV2UI_Handle handle,
+            uint32_t     port_index,
+            uint32_t     buffer_size,
+            uint32_t     format,
+            const void*  buffer)
+{
+	AmpUI* ui = (AmpUI*)handle;
+	if (port_index == AMP_GAIN) {
+    const float _gain = *(float*)buffer;
+    ui->disable_signals = true;
+    robtk_dial_set_value (ui->amp_gain, _gain);
+    ui->disable_signals = false;
+	}
+}
+
 static const void*
-extension_data (const char* uri)
+extension_data(const char* uri)
 {
 	return NULL;
 }
 
-static void
-port_event (
-    LV2UI_Handle handle,
-    uint32_t     port,
-    uint32_t     buffer_size,
-    uint32_t     format,
-    const void*  buffer)
-{
-	AmpUI* ui = (AmpUI*)handle;
-
-	if (format != 0) {
-		return;
-	}
-	const float _gain = *(float*)buffer;
-
-	if (port == AMP_GAIN) {
-		ui->disable_signals = true;
-	const float _gain = *(float*)buffer;
-		//robtk_dial_set_value (ui->amp_gain, knob_gain_to_pos (_gain));
-		robtk_dial_set_value (ui->amp_gain, _gain);
-		//robtk_dial_set_state (ui->amp_gain, _gain < 0 ? 1 : 0);
-		ui->disable_signals = false;
-	}
-}

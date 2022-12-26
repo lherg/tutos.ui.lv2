@@ -43,7 +43,7 @@ cb_amp_gain(GtkWidget* widget, gpointer data)
 {
   AmpUI* ui = (AmpUI*)data;
   const float gain = (float)gtk_range_get_value(GTK_RANGE(ui->hscale ));
-  ui->write (ui->controller, 0, sizeof (float), 0, &gain);
+  ui->write (ui->controller, AMP_GAIN, sizeof (float), 0, &gain);
   return TRUE;
 }
 

@@ -43,7 +43,7 @@ cb_amp_gain(GtkWidget* widget, gpointer data)
 {
   AmpUI* ui = (AmpUI*)data;
   const float gain = (float)gtk_range_get_value(GTK_RANGE(ui->hscale ));
-  ui->write (ui->controller, 0, sizeof (float), 0, &gain);
+  ui->write (ui->controller, AMP_GAIN, sizeof (float), 0, &gain);
   return TRUE;
 }
 
@@ -110,7 +110,7 @@ port_event(LV2UI_Handle handle,
 {
   AmpUI* ui = (AmpUI*)handle;
 	if (port_index == AMP_GAIN) {
-    const float _gain       = *(float*)buffer;
+    const float _gain = *(float*)buffer;
     gtk_range_set_value (GTK_RANGE(ui->hscale ),_gain);
 
 	}  
