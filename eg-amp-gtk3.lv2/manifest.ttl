@@ -9,6 +9,6 @@
 
 
 <http://lv2plug.in/plugins/eg-amp-gtk3#ui>
-	a ui:GtkUI ;
+	a ui:Gtk3UI ;
 	lv2:binary <amp_ui.so> ;
 	rdfs:seeAlso <amp.ttl> .

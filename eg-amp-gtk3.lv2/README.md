@@ -17,5 +17,5 @@ make install
 
 Run<br/>
 ```
-jalv.gtk http://lv2plug.in/plugins/eg-amp-gtk3
+jalv.gtk3 http://lv2plug.in/plugins/eg-amp-gtk3
 ```

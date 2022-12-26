@@ -6,8 +6,6 @@
 @prefix ui:    <http://lv2plug.in/ns/extensions/ui#> .
 @prefix urid:  <http://lv2plug.in/ns/ext/urid#> .
 
-
-
 <http://lv2plug.in/plugins/eg-amp-gtk2>
 	a lv2:Plugin ,
 		lv2:AmplifierPlugin ;
@@ -15,6 +13,7 @@
 	doap:name "Simple Amplifier" ;
 	doap:license <http://opensource.org/licenses/isc> ;
 	lv2:optionalFeature lv2:hardRTCapable ;
+	lv2:requiredFeature urid:map ;
 	ui:ui <http://lv2plug.in/plugins/eg-amp-gtk2#ui> ;
 		lv2:port [
 		a lv2:InputPort ,
@@ -53,10 +52,4 @@
 <http://lv2plug.in/plugins/eg-amp-gtk2#ui>
 	a ui:GtkUI ;
 	lv2:requiredFeature urid:map ;
-	lv2:optionalFeature ui:requestValue ;
-	lv2:extensionData ui:showInterface ;	
-	ui:portNotification [
-		ui:plugin <http://lv2plug.in/plugins/eg-amp-gtk2>;
-		lv2:symbol "gain" ;
-		ui:protocol ui:floatProtocol
-	] .
+	.

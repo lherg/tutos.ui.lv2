@@ -3,13 +3,8 @@
 @prefix rdf:   <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
 @prefix rdfs:  <http://www.w3.org/2000/01/rdf-schema#> .
 @prefix units: <http://lv2plug.in/ns/extensions/units#> .
-
 @prefix ui:    <http://lv2plug.in/ns/extensions/ui#> .
 @prefix urid:  <http://lv2plug.in/ns/ext/urid#> .
-@prefix work:  <http://lv2plug.in/ns/ext/worker#> .
-@prefix xsd:   <http://www.w3.org/2001/XMLSchema#> .
-
-
 
 <http://lv2plug.in/plugins/eg-amp-gtk3>
 	a lv2:Plugin ,
@@ -18,6 +13,7 @@
 	doap:name "Simple Amplifier" ;
 	doap:license <http://opensource.org/licenses/isc> ;
 	lv2:optionalFeature lv2:hardRTCapable ;
+	lv2:requiredFeature urid:map ;	
 	ui:ui <http://lv2plug.in/plugins/eg-amp-gtk3#ui> ;
 		lv2:port [
 		a lv2:InputPort ,
@@ -54,12 +50,6 @@
 	] .
 
 <http://lv2plug.in/plugins/eg-amp-gtk3#ui>
-	a ui:GtkUI ;
+	a ui:Gtk3UI ;
 	lv2:requiredFeature urid:map ;
-	lv2:optionalFeature ui:requestValue ;
-	lv2:extensionData ui:showInterface ;	
-	ui:portNotification [
-		ui:plugin <http://lv2plug.in/plugins/eg-amp-gtk3>;
-		lv2:symbol "notify" ;
-		ui:notifyType atom:Blank
-	] .
+	.
