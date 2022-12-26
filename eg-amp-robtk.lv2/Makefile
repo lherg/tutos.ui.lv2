@@ -10,10 +10,6 @@ CFLAGS ?= -Wall -g -Wno-unused-function
 PKG_CONFIG?=pkg-config
 STRIP?= strip
 
-# grid-size (should be at least 4x4 for the MOD-GUI)
-N_INPUTS ?= 1
-N_OUTPUTS ?= 1
-
 BUILDOPENGL?=yes
 BUILDJACKAPP?=yes
 
@@ -203,8 +199,6 @@ $(BUILDDIR)manifest.ttl: lv2ttl/manifest.ttl
 
 $(BUILDDIR)$(LV2NAME).ttl: lv2ttl/$(LV2NAME).ttl
 	cp lv2ttl/$(LV2NAME).ttl $(BUILDDIR)$(LV2NAME).ttl
-
-override CFLAGS+= -DN_INPUTS=$(N_INPUTS) -DN_OUTPUTS=$(N_OUTPUTS)
 
 DSP_SRC = src/$(LV2NAME).c
 DSP_DEPS = $(DSP_SRC) src/$(LV2NAME).h
