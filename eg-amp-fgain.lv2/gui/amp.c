@@ -13,14 +13,25 @@
 #define RTK_URI AMP_URI
 #define RTK_GUI "ui"
 
+//#define GD_W  140
+//#define GD_H  80
+//#define GD_RAD 30
+//#define GD_CX 70
+//#define GD_CY 40
+
 typedef struct {
 	LV2UI_Write_Function write;
 	LV2UI_Controller     controller;
 	LV2UI_Touch*         touch;
 
+	PangoFontDescription* font[2];
+
 	RobWidget* rw;
 	RobWidget* amp_table;
+
 	RobTkDial* amp_gain;
+	cairo_surface_t* amp_cr;
+
 	RobTkLbl*  amp_lbl;
 
 	bool disable_signals;
@@ -38,6 +49,59 @@ destroy_window(AmpUI* ui)
     rob_table_destroy (ui->amp_table);
     rob_box_destroy (ui->rw);
 }
+
+static void
+prepare_faceplates (AmpUI* ui)
+{
+	cairo_t* cr;
+	float    xlp, ylp;
+
+/* clang-format off */
+#define INIT_DIAL_SF(VAR, W, H)                                             \
+  VAR = cairo_image_surface_create (CAIRO_FORMAT_ARGB32, 2 * (W), 2 * (H)); \
+  cr  = cairo_create (VAR);                                                 \
+  cairo_scale (cr, 2.0, 2.0);                                               \
+  CairoSetSouerceRGBA (c_trs);                                              \
+  cairo_set_operator (cr, CAIRO_OPERATOR_SOURCE);                           \
+  cairo_rectangle (cr, 0, 0, W, H);                                         \
+  cairo_fill (cr);                                                          \
+  cairo_set_operator (cr, CAIRO_OPERATOR_OVER);
+
+#define DIALDOTS(V, XADD, YADD)                                \
+  float ang = (-.75 * M_PI) + (1.5 * M_PI) * (V);              \
+  xlp       = GED_CX + XADD + sinf (ang) * (GED_RADIUS + 3.0); \
+  ylp       = GED_CY + YADD - cosf (ang) * (GED_RADIUS + 3.0); \
+  cairo_set_line_cap (cr, CAIRO_LINE_CAP_ROUND);               \
+  CairoSetSouerceRGBA (c_g80);                                 \
+  cairo_set_line_width (cr, 2.5);                              \
+  cairo_move_to (cr, rint (xlp) - .5, rint (ylp) - .5);        \
+  cairo_close_path (cr);                                       \
+  cairo_stroke (cr);
+
+#define RESPLABLEL(V)                                             \
+  {                                                               \
+    DIALDOTS (V, 4.5, 15.5)                                       \
+    xlp = rint (GED_CX + 4.5 + sinf (ang) * (GED_RADIUS + 9.5));  \
+    ylp = rint (GED_CY + 15.5 - cosf (ang) * (GED_RADIUS + 9.5)); \
+  }
+  
+	
+	INIT_DIAL_SF (ui->amp_cr, GED_WIDTH + 8, GED_HEIGHT + 20);
+	RESPLABLEL (0.00);
+	write_text_full (cr, "-12", ui->font[0], xlp + 6, ylp, 0, 1, c_g80);
+	RESPLABLEL (0.25);
+	RESPLABLEL (0.5);
+	write_text_full (cr, "+12", ui->font[0], xlp - 2, ylp, 0, 2, c_g80);
+	RESPLABLEL (.75);
+	RESPLABLEL (1.0);
+	write_text_full (cr, "0", ui->font[0], xlp - 6, ylp, 0, 3, c_g80);
+	cairo_destroy (cr);
+
+#undef DIALDOTS
+#undef INIT_DIAL_SF
+#undef RESPLABLEL
+}
+
 
 /* Gain callback (Gtk widget). */
 static bool
@@ -59,7 +123,12 @@ toplevel (AmpUI* ui, void* const top)
 	ui->rw = rob_vbox_new (FALSE, 2);
 	robwidget_make_toplevel (ui->rw, top);
 	robwidget_toplevel_enable_scaling (ui->rw);
-	
+
+	ui->font[0] = pango_font_description_from_string ("Mono 9px");
+	ui->font[1] = pango_font_description_from_string ("Mono 10px");
+
+	prepare_faceplates (ui);
+
 	/* toplevel */
 	ui->amp_table = rob_table_new (/*rows*/ 2, /*cols*/ 1, FALSE);
 
@@ -75,6 +144,7 @@ toplevel (AmpUI* ui, void* const top)
 	ui->amp_gain = robtk_dial_new_with_size (
 		-12.0f, 12.0f, 0.1f,
 		GED_WIDTH + 8, GED_HEIGHT + 20, GED_CX + 4, GED_CY + 15, GED_RADIUS);
+		
 	robtk_dial_set_default (ui->amp_gain, 0.0f);
 	robtk_dial_set_callback (ui->amp_gain, cb_amp_gain, ui);
 	float detent = 0.f;
@@ -82,10 +152,14 @@ toplevel (AmpUI* ui, void* const top)
 	robtk_dial_enable_states (ui->amp_gain, 1);
 	robtk_dial_set_state_color (ui->amp_gain, 1, 1.0, .0, .0, .3);
 	robtk_dial_set_default_state (ui->amp_gain, 0);
+
 	ui->amp_gain->displaymode = 3;
 	if (ui->touch) {
 		robtk_dial_set_touch (ui->amp_gain, ui->touch->touch, ui->touch->handle, AMP_OUTPUT);
 	}
+
+	robtk_dial_set_scaled_surface_scale (ui->amp_gain, ui->amp_cr, 2.0);
+	
 	rob_table_attach (ui->amp_table, robtk_dial_widget (ui->amp_gain),
 						1, 2,
 						1, 2,
