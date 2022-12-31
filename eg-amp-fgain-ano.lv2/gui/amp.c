@@ -102,6 +102,35 @@ prepare_faceplates (AmpUI* ui)
 #undef RESPLABLEL
 }
 
+static void
+display_annotation (AmpUI* ui, RobTkDial* d, cairo_t* cr, const char* txt)
+{
+	int tw, th;
+	cairo_save (cr);
+	PangoLayout* pl = pango_cairo_create_layout (cr);
+	pango_layout_set_font_description (pl, ui->font[0]);
+	pango_layout_set_text (pl, txt, -1);
+	pango_layout_get_pixel_size (pl, &tw, &th);
+	cairo_translate (cr, d->w_width / 2, d->w_height - 2);
+	cairo_translate (cr, -tw / 2.0, -th);
+	cairo_set_source_rgba (cr, .0, .0, .0, .7);
+	rounded_rectangle (cr, -1, -1, tw + 3, th + 1, 3);
+	cairo_fill (cr);
+	CairoSetSouerceRGBA (c_wht);
+	pango_cairo_show_layout (cr, pl);
+	g_object_unref (pl);
+	cairo_restore (cr);
+	cairo_new_path (cr);
+}
+
+static void
+dial_annotation_db (RobTkDial* d, cairo_t* cr, void* data)
+{
+	AmpUI* ui = (AmpUI*)(data);
+	char    txt[16];
+	snprintf (txt, 16, "%5.1f dB", d->cur);
+	display_annotation (ui, d, cr, txt);
+}
 
 /* Gain callback (Gtk widget). */
 static bool
@@ -153,7 +182,10 @@ toplevel (AmpUI* ui, void* const top)
 	robtk_dial_set_state_color (ui->amp_gain, 1, 1.0, .0, .0, .3);
 	robtk_dial_set_default_state (ui->amp_gain, 0);
 
+	robtk_dial_annotation_callback (ui->amp_gain, dial_annotation_db, ui);	
+
 	ui->amp_gain->displaymode = 3;
+
 	if (ui->touch) {
 		robtk_dial_set_touch (ui->amp_gain, ui->touch->touch, ui->touch->handle, AMP_OUTPUT);
 	}

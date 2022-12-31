@@ -40,3 +40,7 @@ the Makefile is adapted from that of matrixmixer.<br/>
 ## eg-amp-fgain.lv2<br/>
 Creating graduation for the knob: eg-amp-robtk.lv2 <br/>
 ![alt text](https://github.com/lherg/tutos.ui.lv2/blob/main/png/eg-amp-fgain.png)<br/>
+
+## eg-amp-fgain-ano.lv2<br/>
+Creating annotation for the knob to display level: eg-amp-fgain.lv2 <br/>
+![alt text](https://github.com/lherg/tutos.ui.lv2/blob/main/png/eg-amp-fgain-ano.png)<br/>
