@@ -8,7 +8,7 @@ static const RtkLv2Description _plugin = {
 	, "Simple Amplifier"
 	, (const struct LV2Port[3])
 	{
-		{ "gain", CONTROL_IN, 0.f, -90.f, 24.f,"Gain"},		
+		{ "gain", CONTROL_IN, 0.f, -12.f, 12.f,"Gain"},		
 		{ "in", AUDIO_IN, nan, nan, nan, "Audio Input"},
 		{ "out", AUDIO_OUT, nan, nan, nan, "Audio Output"},
 	}

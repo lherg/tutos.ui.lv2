@@ -234,12 +234,12 @@ endif
 # install/uninstall/clean target definitions
 
 install:
-	ln -s $(PWD)/build ~/.lv2/amp.lv2
+	ln -s $(PWD)/build ~/.lv2/eg-amp-robtk.lv2
 
 clean:
 	rm -rf $(BUILDDIR)
 	rm -rf $(BINDIR)
-	rm -rf ~/.lv2/amp.lv2
+	rm -rf ~/.lv2/eg-amp-robtk.lv2
 
 distclean: clean
 	rm -f cscope.out cscope.files tags
