@@ -1,6 +1,7 @@
 #!/usr/bin/make -f
 ################################################################################################
 BUILDDIR = build/
+DOCKERDIR ?=/docker_build
 APPNAME = amp
 APPUINAME =
 PKG_CONFIG ?=pkg-config
@@ -47,5 +48,12 @@ uninstall:
 
 clean:
 	rm -Rf $(BUILDDIR) ~/.lv2/$(LV2NAME)
+
+clean_docker:
+	sudo rm -Rf $(DOCKERDIR)/$(LV2NAME)
+
+install_docker:
+	@sudo mkdir -p $(DOCKERDIR)/$(LV2NAME)
+	sudo cp -Rf $(BUILDDIR)* $(DOCKERDIR)/$(LV2NAME)
 
 .PHONY: clean all install uninstall

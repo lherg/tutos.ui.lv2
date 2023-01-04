@@ -1,6 +1,7 @@
 #!/usr/bin/make -f
 PREFIX ?= /usr/local
 BINDIR ?= $(PREFIX)/bin
+DOCKERDIR ?=/docker_build
 MANDIR ?= $(PREFIX)/share/man/man1
 # see http://lv2plug.in/pages/filesystem-hierarchy-standard.html, don't use libdir
 LV2DIR ?= $(PREFIX)/lib/lv2
@@ -240,6 +241,14 @@ clean:
 	rm -rf $(BUILDDIR)
 	rm -rf $(BINDIR)
 	rm -rf ~/.lv2/eg-amp-robtk.lv2
+
+install_docker:
+	@sudo mkdir -p $(DOCKERDIR)/eg-amp-robtk.lv2
+	sudo cp -Rf $(BUILDDIR)* $(DOCKERDIR)/eg-amp-robtk.lv2
+	sudo cp -Rf $(BINDIR)* $(DOCKERDIR)/eg-amp-robtk.lv2
+
+clean_docker:
+	sudo rm -Rf $(DOCKERDIR)/eg-amp-robtk.lv2
 
 distclean: clean
 	rm -f cscope.out cscope.files tags
